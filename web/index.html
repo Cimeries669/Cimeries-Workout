@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#050505">
+  <meta name="description" content="Cimeries Workout: entrenamientos, cargas y progreso.">
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" href="icons/icon.svg">
+  <link rel="stylesheet" href="styles.css">
+  <title>Cimeries Workout</title>
+</head>
+<body>
+<div class="app">
+  <header class="topbar">
+    <div class="brand"><div class="mark">CW</div><div><h1>Cimeries Workout</h1><p id="todayText"></p></div></div>
+    <button class="icon" id="quickAdd">+</button>
+  </header>
+
+  <main>
+    <section class="view active" id="view-today">
+      <article class="hero">
+        <span class="kicker">ENTRENAMIENTO DE HOY</span>
+        <h2 id="todayTitle">Cargando...</h2>
+        <p id="todaySubtitle"></p>
+        <div class="hero-actions">
+          <button class="primary" id="startToday">INICIAR</button>
+          <button class="secondary" id="chooseDay">ELEGIR DÍA</button>
+        </div>
+      </article>
+      <div class="stats">
+        <article><strong id="statExercises">0</strong><span>ejercicios hoy</span></article>
+        <article><strong id="statSessions">0</strong><span>sesiones</span></article>
+        <article><strong id="statPR">0</strong><span>marcas</span></article>
+      </div>
+      <article class="panel">
+        <div class="panel-head"><div><span class="kicker">SEMANA</span><h3>Tu plan</h3></div></div>
+        <div class="week" id="week"></div>
+      </article>
+      <article class="panel">
+        <div class="panel-head"><div><span class="kicker">ÚLTIMO PROGRESO</span><h3>Cargas recientes</h3></div></div>
+        <div id="recent" class="list"></div>
+      </article>
+    </section>
+
+    <section class="view" id="view-plan">
+      <div class="title-row"><div><span class="kicker">PLAN EDITABLE</span><h2>Entrenamientos</h2></div><button class="primary small" id="addExercise">+ EJERCICIO</button></div>
+      <div id="plan"></div>
+    </section>
+
+    <section class="view" id="view-workout">
+      <div class="title-row"><div><span class="kicker">SESIÓN ACTIVA</span><h2 id="workoutTitle">Entrenamiento</h2><p id="workoutDate"></p></div><button class="danger" id="cancelWorkout">CANCELAR</button></div>
+      <article class="panel controls">
+        <label>Fecha<input type="date" id="sessionDate"></label>
+        <label>Día<select id="sessionDay"></select></label>
+      </article>
+      <div id="workout"></div>
+      <button class="primary save-workout" id="saveWorkout">GUARDAR ENTRENAMIENTO</button>
+    </section>
+
+    <section class="view" id="view-history">
+      <div class="title-row"><div><span class="kicker">PROGRESO</span><h2>Historial</h2></div><button class="secondary small" id="exportTop">EXPORTAR</button></div>
+      <div id="historyStats" class="stats"></div>
+      <article class="panel"><span class="kicker">MEJORES CARGAS</span><h3>Récords por ejercicio</h3><div id="prs" class="list"></div></article>
+      <article class="panel"><span class="kicker">SESIONES</span><h3>Entrenamientos guardados</h3><div id="history" class="list"></div></article>
+    </section>
+
+    <section class="view" id="view-settings">
+      <div class="title-row"><div><span class="kicker">AJUSTES</span><h2>Personalizar</h2></div></div>
+      <article class="panel form">
+        <label>Nombre<input id="appName" maxlength="32"></label>
+        <label>Unidad<select id="unit"><option value="lb">Libras (lb)</option><option value="kg">Kilogramos (kg)</option></select></label>
+        <label class="wide">Objetivo<textarea id="goal" rows="3"></textarea></label>
+        <button class="primary wide" id="saveSettings">GUARDAR AJUSTES</button>
+      </article>
+      <article class="panel">
+        <span class="kicker">RESPALDO</span><h3>Tus datos</h3>
+        <p class="muted">Los entrenamientos se guardan localmente. Exporta una copia antes de cambiar de teléfono.</p>
+        <div class="buttons"><button class="secondary" id="exportData">EXPORTAR JSON</button><label class="secondary file">IMPORTAR JSON<input type="file" id="importData" accept="application/json"></label></div>
+      </article>
+      <article class="panel warning">
+        <span class="kicker">RESTABLECER</span><h3>Volver a la rutina inicial</h3>
+        <p class="muted">Borra cambios e historial guardado.</p>
+        <button class="danger" id="resetApp">RESTABLECER APP</button>
+      </article>
+    </section>
+  </main>
+
+  <nav class="nav">
+    <button class="active" data-view="today"><b>⌂</b>Inicio</button>
+    <button data-view="plan"><b>▦</b>Plan</button>
+    <button data-view="history"><b>↗</b>Historial</button>
+    <button data-view="settings"><b>⚙</b>Ajustes</button>
+  </nav>
+</div>
+
+<dialog id="exerciseDialog">
+<form id="exerciseForm" class="dialog">
+  <div class="dialog-head"><div><span class="kicker">EJERCICIO</span><h3 id="dialogTitle">Nuevo ejercicio</h3></div><button type="button" class="icon" id="closeExercise">×</button></div>
+  <input type="hidden" id="exerciseId">
+  <div class="form">
+    <label class="wide">Nombre<input id="exerciseName" required></label>
+    <label>Grupo muscular<input id="exerciseMuscle" required></label>
+    <label>Equipo<input id="exerciseEquipment" placeholder="Máquina, polea, Smith"></label>
+    <label>Series<input id="exerciseSets" type="number" min="1" max="12" value="3"></label>
+    <label>Reps mín.<input id="exerciseMin" type="number" min="1" max="100" value="8"></label>
+    <label>Reps máx.<input id="exerciseMax" type="number" min="1" max="100" value="12"></label>
+    <label>RIR<input id="exerciseRir" type="number" min="0" max="5" value="2"></label>
+    <label>Descanso (s)<input id="exerciseRest" type="number" min="15" max="600" value="120"></label>
+    <label class="wide">Días<select id="exerciseDays" multiple size="7"></select></label>
+    <label class="wide">YouTube<input id="exerciseYoutube" type="url" placeholder="https://youtube.com/watch?v=..."></label>
+    <label class="wide">Tip<textarea id="exerciseTip" rows="3"></textarea></label>
+  </div>
+  <div class="buttons"><button type="button" class="danger hide" id="deleteExercise">ELIMINAR</button><button class="primary" type="submit">GUARDAR</button></div>
+</form>
+</dialog>
+
+<dialog id="videoDialog"><div class="dialog"><div class="dialog-head"><h3 id="videoTitle">Video</h3><button class="icon" id="closeVideo">×</button></div><div id="videoBox"></div><a id="youtubeLink" target="_blank" rel="noopener" class="primary link">ABRIR EN YOUTUBE</a></div></dialog>
+<dialog id="sessionDialog"><div class="dialog"><div class="dialog-head"><h3>Detalle de sesión</h3><button class="icon" id="closeSession">×</button></div><div id="sessionDetail"></div></div></dialog>
+<div id="toast" class="toast"></div>
+<script src="app.js"></script>
+</body>
+</html>
