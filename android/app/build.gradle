@@ -1,0 +1,25 @@
+plugins { id 'com.android.application' }
+
+android {
+    namespace 'com.cimeries.workout'
+    compileSdk 35
+
+    defaultConfig {
+        applicationId 'com.cimeries.workout'
+        minSdk 24
+        targetSdk 35
+        versionCode 2
+        versionName '1.1.0'
+    }
+
+    sourceSets {
+        main.assets.srcDirs = ['src/main/assets']
+    }
+}
+
+tasks.register('syncWebAssets', Copy) {
+    from '../../web'
+    into 'src/main/assets/web'
+}
+
+preBuild.dependsOn syncWebAssets
