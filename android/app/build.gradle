@@ -12,6 +12,19 @@ android {
         versionName '1.1.0'
     }
 
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+
+    // The app is a local WebView wrapper. Android Studio's bundled lint can
+    // fail on some newer JDK/IDE combinations during signed release builds.
+    // Keep release packaging independent from that IDE lint crash.
+    lint {
+        checkReleaseBuilds false
+        abortOnError false
+    }
+
     sourceSets {
         main.assets.srcDirs = ['src/main/assets']
     }
