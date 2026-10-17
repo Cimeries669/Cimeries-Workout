@@ -1,0 +1,12 @@
+{
+  "name": "Cimeries Workout",
+  "short_name": "Cimeries",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#050505",
+  "theme_color": "#95d600",
+  "orientation": "portrait-primary",
+  "icons": [
+    {"src":"icons/icon.svg","sizes":"any","type":"image/svg+xml","purpose":"any maskable"}
+  ]
+}
